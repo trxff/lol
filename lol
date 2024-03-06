@@ -1,1 +1,130 @@
-%20game.StarterGui%3ASetCore%28%22SendNotification%22%2C%20%7B%0A%20%20%20%20%20Title%20%3D%20%27Made%20by%20trxf%27%3B%0A%20%20%20%20%20Text%20%3D%20%27%3C3%27%3B%0A%20%20%20%20%20Icon%20%3D%20%27rbxassetid%3A%2F%2F16645284854%27%3B%0A%20%20%20%20%20Duration%20%3D%20%222%22%3B%0A%20%7D%29%0A%0Aif%20not%20game%3AIsLoaded%28%29%20then%0A%20%20%20%20game.Loaded%3AWait%28%29%0Aend%0A%0Alocal%20Settings%20%3D%20%7B%0A%20%20%20%20Silent%20%3D%20%7B%0A%20%20%20%20%20%20%20%20Enabled%20%3D%20true%2C%0A%20%20%20%20%20%20%20%20Part%20%3D%20%22UpperTorso%22%2C%0A%20%20%20%20%20%20%20%20Pred%20%3D%200.119%2C%0A%20%20%20%20%20%20%20%20ClosestPart%20%3D%20true%2C%0A%20%20%20%20%7D%2C%0A%20%20%20%20FOV%20%3D%20%7B%0A%20%20%20%20%20%20%20%20Visible%20%3D%20false%2C%0A%20%20%20%20%20%20%20%20Radius%20%3D%2090.5%0A%20%20%20%20%7D%0A%7D%0A%0Alocal%20Players%2C%20Client%2C%20Mouse%2C%20RS%2C%20Camera%20%3D%0A%20%20%20%20game%3AGetService%28%22Players%22%29%2C%0A%20%20%20%20game%3AGetService%28%22Players%22%29.LocalPlayer%2C%0A%20%20%20%20game%3AGetService%28%22Players%22%29.LocalPlayer%3AGetMouse%28%29%2C%0A%20%20%20%20game%3AGetService%28%22RunService%22%29%2C%0A%20%20%20%20game.Workspace.CurrentCamera%0A%0Alocal%20Circle%20%3D%20Drawing.new%28%22Circle%22%29%0ACircle.Color%20%3D%20Color3.new%281%2C1%2C1%29%0ACircle.Thickness%20%3D%201%0A%0Alocal%20UpdateFOV%20%3D%20function%20%28%29%0A%20%20%20%20if%20%28not%20Circle%29%20then%0A%20%20%20%20%20%20%20%20return%20Circle%0A%20%20%20%20end%0A%20%20%20%20Circle.Visible%20%3D%20Settings.FOV%5B%22Visible%22%5D%0A%20%20%20%20Circle.Radius%20%3D%20Settings.FOV%5B%22Radius%22%5D%20%2A%203%0A%20%20%20%20Circle.Position%20%3D%20Vector2.new%28Mouse.X%2C%20Mouse.Y%20%2B%20%28game%3AGetService%28%22GuiService%22%29%3AGetGuiInset%28%29.Y%29%29%0A%20%20%20%20return%20Circle%0Aend%0A%0ARS.Heartbeat%3AConnect%28UpdateFOV%29%0A%0AClosestPlrFromMouse%20%3D%20function%28%29%0A%20%20%20%20local%20Target%2C%20Closest%20%3D%20nil%2C%201%2F0%0A%20%0A%20%20%20%20for%20_%20%2Cv%20in%20pairs%28Players%3AGetPlayers%28%29%29%20do%0A%20%20%20%20%20%20%20%20if%20%28v.Character%20and%20v%20~%3D%20Client%20and%20v.Character%3AFindFirstChild%28%22HumanoidRootPart%22%29%29%20then%0A%20%20%20%20%20%20%20%20%20%20%20%20local%20Position%2C%20OnScreen%20%3D%20Camera%3AWorldToScreenPoint%28v.Character.HumanoidRootPart.Position%29%0A%20%20%20%20%20%20%20%20%20%20%20%20local%20Distance%20%3D%20%28Vector2.new%28Position.X%2C%20Position.Y%29%20-%20Vector2.new%28Mouse.X%2C%20Mouse.Y%29%29.Magnitude%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20if%20%28Circle.Radius%20%3E%20Distance%20and%20Distance%20%3C%20Closest%20and%20OnScreen%29%20then%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20Closest%20%3D%20Distance%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20Target%20%3D%20v%0A%20%20%20%20%20%20%20%20%20%20%20%20end%0A%20%20%20%20%20%20%20%20end%0A%20%20%20%20end%0A%20%20%20%20return%20Target%0Aend%0A%0Alocal%20WTS%20%3D%20function%20%28Object%29%0A%20%20%20%20local%20ObjectVector%20%3D%20Camera%3AWorldToScreenPoint%28Object.Position%29%0A%20%20%20%20return%20Vector2.new%28ObjectVector.X%2C%20ObjectVector.Y%29%0Aend%0A%0Alocal%20IsOnScreen%20%3D%20function%20%28Object%29%0A%20%20%20%20local%20IsOnScreen%20%3D%20Camera%3AWorldToScreenPoint%28Object.Position%29%0A%20%20%20%20return%20IsOnScreen%0Aend%0A%0Alocal%20FilterObjs%20%3D%20function%20%28Object%29%0A%20%20%20%20if%20string.find%28Object.Name%2C%20%22Gun%22%29%20then%0A%20%20%20%20%20%20%20%20return%0A%20%20%20%20end%0A%20%20%20%20if%20table.find%28%7B%22Part%22%2C%20%22MeshPart%22%2C%20%22BasePart%22%7D%2C%20Object.ClassName%29%20then%0A%20%20%20%20%20%20%20%20return%20true%0A%20%20%20%20end%0Aend%0A%0Alocal%20GetClosestBodyPart%20%3D%20function%20%28character%29%0A%20%20%20%20local%20ClosestDistance%20%3D%201%2F0%0A%20%20%20%20local%20BodyPart%20%3D%20nil%0A%20%20%20%20if%20%28character%20and%20character%3AGetChildren%28%29%29%20then%0A%20%20%20%20%20%20%20%20for%20_%2C%20%20x%20in%20next%2C%20character%3AGetChildren%28%29%20do%0A%20%20%20%20%20%20%20%20%20%20%20%20if%20FilterObjs%28x%29%20and%20IsOnScreen%28x%29%20then%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20local%20Distance%20%3D%20%28WTS%28x%29%20-%20Vector2.new%28Mouse.X%2C%20Mouse.Y%29%29.Magnitude%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if%20%28Circle.Radius%20%3E%20Distance%20and%20Distance%20%3C%20ClosestDistance%29%20then%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20ClosestDistance%20%3D%20Distance%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20BodyPart%20%3D%20x%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20end%0A%20%20%20%20%20%20%20%20%20%20%20%20end%0A%20%20%20%20%20%20%20%20end%0A%20%20%20%20end%0A%20%20%20%20return%20BodyPart%0Aend%0A%0Alocal%20Prey%0A%0Atask.spawn%28function%20%28%29%0A%20%20%20%20while%20task.wait%28%29%20do%0A%20%20%20%20%20%20%20%20if%20Prey%20then%0A%20%20%20%20%20%20%20%20%20%20%20%20if%20Settings.Silent.Enabled%20and%20Settings.Silent.ClosestPart%20%3D%3D%20true%20then%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20Settings.Silent%5B%22Part%22%5D%20%3D%20tostring%28GetClosestBodyPart%28Prey.Character%29%29%0A%20%20%20%20%20%20%20%20%20%20%20%20end%0A%20%20%20%20%20%20%20%20end%0A%20%20%20%20end%0Aend%29%0A%0Alocal%20grmt%20%3D%20getrawmetatable%28game%29%0Alocal%20backupindex%20%3D%20grmt.__index%0Asetreadonly%28grmt%2C%20false%29%0A%0Agrmt.__index%20%3D%20newcclosure%28function%28self%2C%20v%29%0A%20%20%20%20if%20%28Settings.Silent.Enabled%20and%20Mouse%20and%20tostring%28v%29%20%3D%3D%20%22Hit%22%29%20then%0A%0A%20%20%20%20%20%20%20%20Prey%20%3D%20ClosestPlrFromMouse%28%29%0A%0A%20%20%20%20%20%20%20%20if%20Prey%20then%0A%20%20%20%20%20%20%20%20%20%20%20%20local%20endpoint%20%3D%20game.Players%5Btostring%28Prey%29%5D.Character%5BSettings.Silent%5B%22Part%22%5D%5D.CFrame%20%2B%20%28%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20game.Players%5Btostring%28Prey%29%5D.Character%5BSettings.Silent%5B%22Part%22%5D%5D.Velocity%20%2A%20Settings.Silent.Pred%0A%20%20%20%20%20%20%20%20%20%20%20%20%29%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20%28tostring%28v%29%20%3D%3D%20%22Hit%22%20and%20endpoint%29%0A%20%20%20%20%20%20%20%20end%0A%20%20%20%20end%0A%20%20%20%20return%20backupindex%28self%2C%20v%29%0Aend%29
+ game.StarterGui:SetCore("SendNotification", {
+     Title = 'Made by trxf';
+     Text = '<3';
+     Icon = 'rbxassetid://16645284854';
+     Duration = "2";
+ })
+
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+end
+
+local Settings = {
+    Silent = {
+        Enabled = true,
+        Part = "UpperTorso",
+        Pred = 0.119,
+        ClosestPart = true,
+    },
+    FOV = {
+        Visible = false,
+        Radius = 90.5
+    }
+}
+
+local Players, Client, Mouse, RS, Camera =
+    game:GetService("Players"),
+    game:GetService("Players").LocalPlayer,
+    game:GetService("Players").LocalPlayer:GetMouse(),
+    game:GetService("RunService"),
+    game.Workspace.CurrentCamera
+
+local Circle = Drawing.new("Circle")
+Circle.Color = Color3.new(1,1,1)
+Circle.Thickness = 1
+
+local UpdateFOV = function ()
+    if (not Circle) then
+        return Circle
+    end
+    Circle.Visible = Settings.FOV["Visible"]
+    Circle.Radius = Settings.FOV["Radius"] * 3
+    Circle.Position = Vector2.new(Mouse.X, Mouse.Y + (game:GetService("GuiService"):GetGuiInset().Y))
+    return Circle
+end
+
+RS.Heartbeat:Connect(UpdateFOV)
+
+ClosestPlrFromMouse = function()
+    local Target, Closest = nil, 1/0
+ 
+    for _ ,v in pairs(Players:GetPlayers()) do
+        if (v.Character and v ~= Client and v.Character:FindFirstChild("HumanoidRootPart")) then
+            local Position, OnScreen = Camera:WorldToScreenPoint(v.Character.HumanoidRootPart.Position)
+            local Distance = (Vector2.new(Position.X, Position.Y) - Vector2.new(Mouse.X, Mouse.Y)).Magnitude
+
+            if (Circle.Radius > Distance and Distance < Closest and OnScreen) then
+                Closest = Distance
+                Target = v
+            end
+        end
+    end
+    return Target
+end
+
+local WTS = function (Object)
+    local ObjectVector = Camera:WorldToScreenPoint(Object.Position)
+    return Vector2.new(ObjectVector.X, ObjectVector.Y)
+end
+
+local IsOnScreen = function (Object)
+    local IsOnScreen = Camera:WorldToScreenPoint(Object.Position)
+    return IsOnScreen
+end
+
+local FilterObjs = function (Object)
+    if string.find(Object.Name, "Gun") then
+        return
+    end
+    if table.find({"Part", "MeshPart", "BasePart"}, Object.ClassName) then
+        return true
+    end
+end
+
+local GetClosestBodyPart = function (character)
+    local ClosestDistance = 1/0
+    local BodyPart = nil
+    if (character and character:GetChildren()) then
+        for _,  x in next, character:GetChildren() do
+            if FilterObjs(x) and IsOnScreen(x) then
+                local Distance = (WTS(x) - Vector2.new(Mouse.X, Mouse.Y)).Magnitude
+                if (Circle.Radius > Distance and Distance < ClosestDistance) then
+                    ClosestDistance = Distance
+                    BodyPart = x
+                end
+            end
+        end
+    end
+    return BodyPart
+end
+
+local Prey
+
+task.spawn(function ()
+    while task.wait() do
+        if Prey then
+            if Settings.Silent.Enabled and Settings.Silent.ClosestPart == true then
+                Settings.Silent["Part"] = tostring(GetClosestBodyPart(Prey.Character))
+            end
+        end
+    end
+end)
+
+local grmt = getrawmetatable(game)
+local backupindex = grmt.__index
+setreadonly(grmt, false)
+
+grmt.__index = newcclosure(function(self, v)
+    if (Settings.Silent.Enabled and Mouse and tostring(v) == "Hit") then
+
+        Prey = ClosestPlrFromMouse()
+
+        if Prey then
+            local endpoint = game.Players[tostring(Prey)].Character[Settings.Silent["Part"]].CFrame + (
+                game.Players[tostring(Prey)].Character[Settings.Silent["Part"]].Velocity * Settings.Silent.Pred
+            )
+            return (tostring(v) == "Hit" and endpoint)
+        end
+    end
+    return backupindex(self, v)
+end)
