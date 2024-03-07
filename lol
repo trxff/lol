@@ -13,12 +13,12 @@ local Settings = {
     Silent = {
         Enabled = true,
         Part = "UpperTorso",
-        Pred = 0.119,
+        Pred = 0.12962,
         ClosestPart = true,
     },
     FOV = {
         Visible = false,
-        Radius = 90.5
+        Radius = 30.5
     }
 }
 
