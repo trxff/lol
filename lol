@@ -1,6 +1,6 @@
  game.StarterGui:SetCore("SendNotification", {
      Title = 'Made by trxf';
-     Text = '<3';
+     Text = 'Enabled!';
      Icon = 'rbxassetid://16645284854';
      Duration = "2";
  })
@@ -18,7 +18,7 @@ local Settings = {
     },
     FOV = {
         Visible = false,
-        Radius = 30.5
+        Radius = 60.5
     }
 }
 
